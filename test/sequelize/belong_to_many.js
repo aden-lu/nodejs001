@@ -11,7 +11,7 @@ var User = sequelize.define('User', {username: DataTypes.STRING});
 var Task = sequelize.define('Task', {title: DataTypes.STRING, active: DataTypes.BOOLEAN});
 
 User.belongsToMany(Task, {through: "UserTasks"});
-// Task.belongsToMany(User, {through: "UserTasks"});
+Task.belongsToMany(User, {through: "UserTasks"});
 
 // Task.sync({force: true}).then(function () {
 //     User.sync({force: true});
@@ -32,7 +32,13 @@ sequelize.sync({force: true}).then(function () {
     return john.setTasks(tasks);
 }).spread(function (data) {
     User.find({where: {username: 'John'}}).then(function (john) {
-        console.log(john.getTasks());
+        return john.getTasks({
+            where: {
+                active: true
+            }
+        });// execute innerjoin sql with UserTasks ;
+    }).then(function (tasks) {
+        console.log(JSON.stringify(tasks));
     });
 });
 
