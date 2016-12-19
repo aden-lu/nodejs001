@@ -1,4 +1,4 @@
-var t=Promise.all([function () {
+var t = Promise.all([function () {
     console.log(123);
 }, function () {
     console.log(321);
@@ -33,4 +33,30 @@ promise.then(function (val) {
     console.log(val);
 });
 
-promise.then(() => 6).then(val=>console.log(val));
+promise.then(() = > 6
+).
+then(val = > console.log(val)
+)
+;
+
+function loadImage(url) {
+    return
+    new Promise(
+        function resolver(resolve, reject) {
+            var img = new Image();
+            img.src = url;
+            img.onload = function () {
+                resolve(img);
+            }
+            img.onerror = function (e) {
+                reject(e);
+            }
+        }
+    )
+}
+loadImage('security.png').then(function (img) {
+    document.body.appendChild(img);
+}).catch(function (e) {
+    console.log('error occured while loading image');
+    console.log(e);
+})
