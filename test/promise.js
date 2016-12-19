@@ -1,8 +1,13 @@
-Promise.all([function () {
+var t=Promise.all([function () {
     console.log(123);
 }, function () {
     console.log(321);
 }]);
+
+t.then(function (data) {
+    data[0]();
+    data[1]();
+})
 
 var p = new Promise(function (resolve, reject) {
     var a = 1;
@@ -28,4 +33,4 @@ promise.then(function (val) {
     console.log(val);
 });
 
-promise.then(() => 4).then(val=>console.log(val));
+promise.then(() => 6).then(val=>console.log(val));
