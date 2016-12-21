@@ -9,9 +9,13 @@ var sequelize = new Sequelize(url
 
 var User = sequelize.define('User', {username: DataTypes.STRING});
 var Task = sequelize.define('Task', {title: DataTypes.STRING, active: DataTypes.BOOLEAN});
+var Label = sequelize.define("Label", {title: DataTypes.STRING, 'isActive': DataTypes.BOOLEAN});
 
 User.belongsToMany(Task, {through: "UserTasks"});
 Task.belongsToMany(User, {through: "UserTasks"});
+
+Task.hasMany(Label);
+Label.belongsTo(Task);
 
 // Task.sync({force: true}).then(function () {
 //     User.sync({force: true});
@@ -31,14 +35,26 @@ sequelize.sync({force: true}).then(function () {
     tasks = [task1, task2];
     return john.setTasks(tasks);
 }).spread(function (data) {
-    User.find({where: {username: 'John'}}).then(function (john) {
-        return john.getTasks({
-            where: {
-                active: true
-            }
-        });// execute innerjoin sql with UserTasks ;
-    }).then(function (tasks) {
-        console.log(JSON.stringify(tasks));
+    // User.find({where: {username: 'John'}}).then(function (john) {
+    //     console.log(JSON.stringify(john))
+    //     return john.getTasks({
+    //         where: {
+    //             active: true
+    //         }
+    //     });// execute innerjoin sql with UserTasks ;
+    // }).then(function (tasks) {
+    //     console.log(JSON.stringify(tasks));
+    // });
+
+    User.find({
+        where: {username: 'John'},
+        include: [{
+            model: Task, required: false,
+            where: {active: true},
+            include: [{model: Label, required: false, where: {isActive: false}}]
+        }]
+    }).then(function (john) {
+        console.log(JSON.stringify(john));
     });
 });
 
