@@ -50,10 +50,83 @@ function List() {
     function toString() {
         return this.dataStore;
     }
+
+    function insert(element, after) {
+        var insertPos = this.find(after);
+        if (insertPos > -1) {
+            this.dataStore.splice(insertPos + 1, 0, element);
+            ++this.listSize;
+            return true;
+        }
+        return false;
+    }
+
+    function clear() {
+        delete this.dataStore;
+        this.dataStore = [];
+        this.listSize = this.pos = 0;
+    }
+
+    function contains(element) {
+        for (var i = 0; i < this.dataStore.length; i++) {
+            if (this.dataStore[i] == element) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function front() {
+        this.pos = 0;
+    }
+
+    function end() {
+        this.pos = this.listSize - 1;
+    }
+
+    function prev() {
+        if (this.pos > 0) {
+            --this.pos;
+        }
+    }
+
+    function next() {
+        if (this.pos < this.listSize - 1) {
+            ++this.pos;
+        }
+    }
+
+    function currPos() {
+        return this.pos;
+    }
+
+    function moveTo(position) {
+        this.pos = position;
+    }
+
+    function getElement() {
+        return this.dataStore[this.pos];
+    }
 }
 
 
 var names = new List();
 names.append('Cynthia');
 names.append("Raymond");
-console.log(names.toString());
+names.append("Clayton");
+names.append("Jennifer");
+names.append("Danny");
+
+names.front();
+names.next();
+console.log(names.getElement());
+
+// There is some bug which will be endless loop.
+// for (names.front(); names.currPos() < names.length(); names.next()) {
+//     console.log(names.getElement());
+// }
+// for (names.end(); names.currPos() >= 0; names.prev()) {
+//     console.log(names.getElement());
+// }
+
+module.exports=List();
