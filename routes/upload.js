@@ -18,4 +18,4 @@ router.post('/', function (req, res, next) {
     });
 });
 
-module.exports = upload;
+module.exports = router;
